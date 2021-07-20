@@ -12,10 +12,10 @@ export class MixRunner {
 
   public async run(mixPath: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-      const command = `mix test --trace --seed=0 --only=""`;
+      const command = `mix test --trace --seed=0`;
 
       this.currentProcess = childProcess.exec(command, { cwd: mixPath }, (err, stdout, stderr) => {
-        if (stderr.trim() === 'The --only option was given to "mix test" but no test was executed') {
+        if (!stderr) {
           return resolve(stdout);
         } else if (stdout.trim().includes('== Compilation error in file')) {
           return reject(`Failed to load tests in project ${mixPath}:\n ${stderr} \n ${stdout}`);
